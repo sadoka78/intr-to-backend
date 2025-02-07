@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .add-btn, .delete-btn {
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .add-btn {
+            background: #28a745;
+            color: white;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+            width: 150px;
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+        .detail-container, .form-container {
+            width: 40%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+        .back-link, .save-btn, .cancel-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link {
+            background: #007bff;
+            color: white;
+        }
+        .save-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .cancel-btn {
+            background: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Todo List</h1>
+        <a href="{% url 'todo_create' %}" class="add-btn">+ Add Todo</a>
+        {% for todo in todos %}
+            <div class="todo-item">
+                <a href="{% url 'todo_detail' todo.id %}">{{ todo.title }}</a>
+                <a href="{% url 'todo_delete' todo.id %}" class="delete-btn">Delete</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="detail-container">
+        <h1>{{ todo.title }}</h1>
+        <p><strong>Description:</strong> {{ todo.description }}</p>
+        <p><strong>Due Date:</strong> {{ todo.due_date }}</p>
+        <p><strong>Status:</strong> {% if todo.status %}Completed{% else %}Pending{% endif %}</p>
+        <a href="{% url 'todo_list' %}" class="back-link">Back to list</a>
+    </div>
+
+    <div class="form-container">
+        <h1>Add Todo</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="save-btn">Save</button>
+            <a href="{% url 'todo_list' %}" class="cancel-btn">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>
